@@ -6,6 +6,14 @@ DATABASE="flaskmemo.db"
 from flask_login import UserMixin,LoginManager,login_required,login_user,logout_user
 import os
 from werkzeug.security import generate_password_hash,check_password_hash
+def connect_db():
+    rv = sqlite3.connect(DATABASE)
+    rv.row_factory = sqlite3.Row
+    return rv
+def get_db():
+    if not hasattr(g,'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
 
 app = Flask(__name__, static_folder='./templates/images')
 app.secret_key = os.urandom(24)
@@ -129,11 +137,3 @@ def delete(id):
 if __name__ == "__main__":
     app.run()
     
-def connect_db():
-    rv = sqlite3.connect(DATABASE)
-    rv.row_factory = sqlite3.Row
-    return rv
-def get_db():
-    if not hasattr(g,'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
