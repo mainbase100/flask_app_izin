@@ -97,8 +97,9 @@ def regist():
     if request.method =='POST':
         title = request.form.get('title')
         body = request.form.get('body')
+        create_user = request.form.get('create_user')
         db = get_db()
-        db.execute("insert into memo (title,body,create_user) values(?,?)",[title,body])
+        db.execute("insert into memo (title,body,create_user) values(?,?,?)",[title,body,create_user])
         db.commit()
         return redirect('/')
     
